@@ -46,5 +46,11 @@ namespace HudMon
             public uint NextBuildNumber { get; set; }
             public List<Module> Modules { get; set; }
         }
+
+        class SimpleJob
+        {
+            public string Name { get; set; }
+            public string Url { get; set; }
+        }
     }
 }
