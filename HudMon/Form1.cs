@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,16 +12,32 @@ namespace HudMon
 {
     public partial class Form1 : Form
     {
-        HudsonFactory hudsonFactory = new JsonHudsonFactory("http://endor/hudson/");
+        HudsonFactory hudsonFactory;
 
         private BindingList<Hudson.Job> jobs = new BindingList<HudMon.Hudson.Job>();
-        public Form1()
+        private BindingList<Hudson.Build> builds = new BindingList<HudMon.Hudson.Build>();
+
+        public string Url { get; private set; }
+
+        public Form1(string url)
         {
             InitializeComponent();
 
+            Url = url;
+
+            Text = Url;
+
             hudsonJobsSource.DataSource = jobs;
+            hudsonBuildsSource.DataSource = builds;
+
+            CreateHudsonFactory();
 
             RetrieveJobs();
+        }
+
+        private void CreateHudsonFactory()
+        {
+            hudsonFactory = new JsonHudsonFactory(Url);
         }
 
         private void RetrieveJobs()
@@ -39,15 +56,15 @@ namespace HudMon
             switch (e.ListChangedType)
             {
                 case ListChangedType.ItemAdded:
-                    MakeListViewItemForNewEntry(e.NewIndex);
+                    MakeJobListViewItemForNewEntry(e.NewIndex);
                     break;
                 case ListChangedType.ItemChanged:
-                    UpdateListViewItem(e.NewIndex);
+                    UpdateJobListViewItem(e.NewIndex);
                     break;
             }
         }
 
-        private void UpdateListViewItem(int index)
+        private void UpdateJobListViewItem(int index)
         {
             ListViewItem item = jobsListView.Items[index];
             CopyJobToListViewItem(index, item);
@@ -77,11 +94,98 @@ namespace HudMon
             return sb.ToString();
         }
 
-        private void MakeListViewItemForNewEntry(int index)
+        private void MakeJobListViewItemForNewEntry(int index)
         {
             ListViewItem item = new ListViewItem();
             CopyJobToListViewItem(index, item);
             jobsListView.Items.Insert(index, item);
+        }
+
+        private void jobsListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            builds.Clear();
+
+            ListView.SelectedIndexCollection indexes = jobsListView.SelectedIndices;
+
+            if (indexes.Count > 0)
+            {
+                Hudson.Job selectedJob = jobs[indexes[0]];
+
+                foreach (Hudson.Build build in selectedJob.Builds)
+                {
+                    builds.Add(build);
+                }
+            }
+        }
+
+        private void hudsonBuildsSource_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            switch (e.ListChangedType)
+            {
+                case ListChangedType.ItemAdded:
+                    MakeBuildListViewItemForNewEntry(e.NewIndex);
+                    break;
+                case ListChangedType.ItemChanged:
+                    UpdateBuildListViewItem(e.NewIndex);
+                    break;
+                case ListChangedType.Reset:
+                    ClearBuildListView();
+                    break;
+            }
+        }
+
+        private void ClearBuildListView()
+        {
+            buildsListView.Items.Clear();
+        }
+
+        private void UpdateBuildListViewItem(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void MakeBuildListViewItemForNewEntry(int index)
+        {
+            ListViewItem item = new ListViewItem();
+            CopyBuildToListViewItem(index, item);
+            buildsListView.Items.Insert(index, item);
+        }
+
+        private void CopyBuildToListViewItem(int index, ListViewItem item)
+        {
+            Hudson.Build build = builds[index];
+            item.SubItems.Clear();
+            item.SubItems[0].Text = build.Number.ToString();
+            item.SubItems.Add(build.Url);
+        }
+
+        private void buildsListView_DoubleClick(object sender, EventArgs e)
+        {
+            ListView.SelectedIndexCollection indexes = buildsListView.SelectedIndices;
+
+            if (indexes.Count > 0)
+            {
+                Hudson.Build selectedBuild = builds[indexes[0]];
+                Execute(selectedBuild.Url);
+            }
+
+        }
+
+        private void Execute(string what)
+        {
+            Process.Start(what);
+        }
+
+        private void jobsListView_DoubleClick(object sender, EventArgs e)
+        {
+            ListView.SelectedIndexCollection indexes = jobsListView.SelectedIndices;
+
+            if (indexes.Count > 0)
+            {
+                Hudson.Job selectedJob = jobs[indexes[0]];
+
+                Execute(selectedJob.Url);
+            }
         }
     }
 }

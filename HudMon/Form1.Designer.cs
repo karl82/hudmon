@@ -29,24 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.hudsonJobBuildsSource = new System.Windows.Forms.BindingSource(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.jobsListView = new System.Windows.Forms.ListView();
             this.jobNameColumn = new System.Windows.Forms.ColumnHeader();
             this.buildsListView = new System.Windows.Forms.ListView();
+            this.buildNumberColumn = new System.Windows.Forms.ColumnHeader();
+            this.buildUrlColumn = new System.Windows.Forms.ColumnHeader();
+            this.hudsonBuildsSource = new System.Windows.Forms.BindingSource(this.components);
             this.hudsonJobsSource = new System.Windows.Forms.BindingSource(this.components);
-            this.buildsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.hudsonJobBuildsSource)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hudsonBuildsSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonJobsSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.buildsBindingSource)).BeginInit();
             this.SuspendLayout();
-            // 
-            // hudsonJobBuildsSource
-            // 
-            this.hudsonJobBuildsSource.DataSource = this.buildsBindingSource;
             // 
             // splitContainer1
             // 
@@ -78,6 +74,8 @@
             this.jobsListView.TabIndex = 0;
             this.jobsListView.UseCompatibleStateImageBehavior = false;
             this.jobsListView.View = System.Windows.Forms.View.Details;
+            this.jobsListView.SelectedIndexChanged += new System.EventHandler(this.jobsListView_SelectedIndexChanged);
+            this.jobsListView.DoubleClick += new System.EventHandler(this.jobsListView_DoubleClick);
             // 
             // jobNameColumn
             // 
@@ -86,23 +84,37 @@
             // 
             // buildsListView
             // 
+            this.buildsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.buildNumberColumn,
+            this.buildUrlColumn});
             this.buildsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buildsListView.FullRowSelect = true;
             this.buildsListView.Location = new System.Drawing.Point(0, 0);
+            this.buildsListView.MultiSelect = false;
             this.buildsListView.Name = "buildsListView";
             this.buildsListView.Size = new System.Drawing.Size(441, 443);
             this.buildsListView.TabIndex = 0;
             this.buildsListView.UseCompatibleStateImageBehavior = false;
             this.buildsListView.View = System.Windows.Forms.View.Details;
+            this.buildsListView.DoubleClick += new System.EventHandler(this.buildsListView_DoubleClick);
+            // 
+            // buildNumberColumn
+            // 
+            this.buildNumberColumn.Text = "#";
+            // 
+            // buildUrlColumn
+            // 
+            this.buildUrlColumn.Text = "Url";
+            this.buildUrlColumn.Width = 378;
+            // 
+            // hudsonBuildsSource
+            // 
+            this.hudsonBuildsSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.hudsonBuildsSource_ListChanged);
             // 
             // hudsonJobsSource
             // 
             this.hudsonJobsSource.DataSource = typeof(HudMon.Hudson.Job);
             this.hudsonJobsSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.hudsonJobsSource_ListChanged);
-            // 
-            // buildsBindingSource
-            // 
-            this.buildsBindingSource.DataMember = "Builds";
-            this.buildsBindingSource.DataSource = this.hudsonJobsSource;
             // 
             // Form1
             // 
@@ -112,12 +124,11 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.hudsonJobBuildsSource)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.hudsonBuildsSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonJobsSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.buildsBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -125,12 +136,13 @@
         #endregion
 
         private System.Windows.Forms.BindingSource hudsonJobsSource;
-        private System.Windows.Forms.BindingSource hudsonJobBuildsSource;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListView jobsListView;
         private System.Windows.Forms.ColumnHeader jobNameColumn;
         private System.Windows.Forms.ListView buildsListView;
-        private System.Windows.Forms.BindingSource buildsBindingSource;
+        private System.Windows.Forms.ColumnHeader buildNumberColumn;
+        private System.Windows.Forms.ColumnHeader buildUrlColumn;
+        private System.Windows.Forms.BindingSource hudsonBuildsSource;
     }
 }
 
