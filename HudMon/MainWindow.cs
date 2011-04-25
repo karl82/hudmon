@@ -10,29 +10,47 @@ using System.Windows.Forms;
 
 namespace HudMon
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
         HudsonFactory hudsonFactory;
 
         private BindingList<Hudson.Job> jobs = new BindingList<HudMon.Hudson.Job>();
         private BindingList<Hudson.Build> builds = new BindingList<HudMon.Hudson.Build>();
+        private string url_;
 
-        public string Url { get; private set; }
+        public string Url
+        {
+            get {
+                return url_;
+            }
+            set
+            {
+                url_ = value;
+                Text = url_;
 
-        public Form1(string url)
+                CreateHudsonFactory();
+                RetrieveJobs();
+            }
+        }
+
+        public MainWindow(string url)
+        {
+            Initialize();
+
+            Url = url;
+        }
+
+        private void Initialize()
         {
             InitializeComponent();
 
-            Url = url;
-
-            Text = Url;
-
             hudsonJobsSource.DataSource = jobs;
             hudsonBuildsSource.DataSource = builds;
+        }
 
-            CreateHudsonFactory();
-
-            RetrieveJobs();
+        public MainWindow()
+        {
+            Initialize();
         }
 
         private void CreateHudsonFactory()
@@ -185,6 +203,21 @@ namespace HudMon
                 Hudson.Job selectedJob = jobs[indexes[0]];
 
                 Execute(selectedJob.Url);
+            }
+        }
+
+        private void enterURLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AskForUrl();
+        }
+
+        private void AskForUrl()
+        {
+            string url = Url;
+
+            if (FormUtils.InputBox("Hudson URL", "Enter Hudson Server URL", ref url) == DialogResult.OK)
+            {
+                Url = url;
             }
         }
     }
