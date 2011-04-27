@@ -59,5 +59,12 @@ namespace HudMon.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Icon vsta {
+            get {
+                object obj = ResourceManager.GetObject("vsta", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

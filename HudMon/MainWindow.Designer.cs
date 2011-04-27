@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.jobsListView = new System.Windows.Forms.ListView();
             this.jobNameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -36,16 +37,17 @@
             this.buildNumberColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buildUrlColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hudsonBuildsSource = new System.Windows.Forms.BindingSource(this.components);
-            this.hudsonJobsSource = new System.Windows.Forms.BindingSource(this.components);
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.hudsonJobsSource = new System.Windows.Forms.BindingSource(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonBuildsSource)).BeginInit();
+            this.mainMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonJobsSource)).BeginInit();
-            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -115,20 +117,15 @@
             // 
             this.hudsonBuildsSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.hudsonBuildsSource_ListChanged);
             // 
-            // hudsonJobsSource
+            // mainMenuStrip
             // 
-            this.hudsonJobsSource.DataSource = typeof(HudMon.Hudson.Job);
-            this.hudsonJobsSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.hudsonJobsSource_ListChanged);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(666, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
+            this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.mainMenuStrip.Name = "mainMenuStrip";
+            this.mainMenuStrip.Size = new System.Drawing.Size(666, 24);
+            this.mainMenuStrip.TabIndex = 1;
+            this.mainMenuStrip.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
@@ -141,9 +138,21 @@
             // enterURLToolStripMenuItem
             // 
             this.enterURLToolStripMenuItem.Name = "enterURLToolStripMenuItem";
-            this.enterURLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.enterURLToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.enterURLToolStripMenuItem.Text = "Enter URL";
             this.enterURLToolStripMenuItem.Click += new System.EventHandler(this.enterURLToolStripMenuItem_Click);
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Hudson Monitor";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
+            // 
+            // hudsonJobsSource
+            // 
+            this.hudsonJobsSource.DataSource = typeof(HudMon.Hudson.Job);
+            this.hudsonJobsSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.hudsonJobsSource_ListChanged);
             // 
             // MainWindow
             // 
@@ -151,17 +160,18 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(666, 443);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.mainMenuStrip);
+            this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "MainWindow";
-            this.Text = "Form1";
+            this.Text = "Hudson Monitor";
+            this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.hudsonBuildsSource)).EndInit();
+            this.mainMenuStrip.ResumeLayout(false);
+            this.mainMenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonJobsSource)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,9 +187,10 @@
         private System.Windows.Forms.ColumnHeader buildNumberColumn;
         private System.Windows.Forms.ColumnHeader buildUrlColumn;
         private System.Windows.Forms.BindingSource hudsonBuildsSource;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip mainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterURLToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
     }
 }
 
