@@ -41,12 +41,18 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.helloWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hudsonJobsSource = new System.Windows.Forms.BindingSource(this.components);
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonBuildsSource)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
+            this.notifyContextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hudsonJobsSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -130,7 +136,9 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.enterURLToolStripMenuItem});
+            this.enterURLToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -138,7 +146,7 @@
             // enterURLToolStripMenuItem
             // 
             this.enterURLToolStripMenuItem.Name = "enterURLToolStripMenuItem";
-            this.enterURLToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.enterURLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.enterURLToolStripMenuItem.Text = "Enter URL";
             this.enterURLToolStripMenuItem.Click += new System.EventHandler(this.enterURLToolStripMenuItem_Click);
             // 
@@ -149,10 +157,41 @@
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
+            // notifyContextMenuStrip
+            // 
+            this.notifyContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator1,
+            this.helloWorldToolStripMenuItem});
+            this.notifyContextMenuStrip.Name = "contextMenuStrip1";
+            this.notifyContextMenuStrip.Size = new System.Drawing.Size(93, 32);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(89, 6);
+            // 
+            // helloWorldToolStripMenuItem
+            // 
+            this.helloWorldToolStripMenuItem.Name = "helloWorldToolStripMenuItem";
+            this.helloWorldToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.helloWorldToolStripMenuItem.Text = "Exit";
+            // 
             // hudsonJobsSource
             // 
             this.hudsonJobsSource.DataSource = typeof(HudMon.Hudson.Job);
             this.hudsonJobsSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.hudsonJobsSource_ListChanged);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // MainWindow
             // 
@@ -171,6 +210,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.hudsonBuildsSource)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
+            this.notifyContextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.hudsonJobsSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -191,6 +231,11 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterURLToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip notifyContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem helloWorldToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

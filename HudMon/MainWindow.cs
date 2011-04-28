@@ -20,7 +20,8 @@ namespace HudMon
 
         public string Url
         {
-            get {
+            get
+            {
                 return url_;
             }
             set
@@ -28,9 +29,58 @@ namespace HudMon
                 url_ = value;
                 Text = url_;
 
-                CreateHudsonFactory();
-                RetrieveJobs();
+                RefreshJobs();
             }
+        }
+
+        private void RefreshJobs()
+        {
+            CreateHudsonFactory();
+            RetrieveJobs();
+            UpdateNotifyContextMenu();
+        }
+
+        private void UpdateNotifyContextMenu()
+        {
+            ContextMenuStrip tempNotifyContextMenu = CreateBasicNotifyContextMenu();
+
+            if (jobs.Count > 0)
+            {
+                tempNotifyContextMenu.Items.Insert(0, new ToolStripSeparator());
+
+                foreach (Hudson.Job job in jobs)
+                {
+                    tempNotifyContextMenu.Items.Insert(0, new ToolStripMenuItem(job.Name));
+                }
+            }
+
+            notifyIcon.ContextMenuStrip = tempNotifyContextMenu;
+        }
+
+
+        private void exitMenuItem_Click(object sender, System.EventArgs e)
+        {
+            Application.Exit();
+        }
+        private void refreshMenuItem_Click(object sender, System.EventArgs e)
+        {
+            RefreshJobs();
+        }
+
+        private ContextMenuStrip CreateBasicNotifyContextMenu()
+        {
+            ContextMenuStrip basicNotifyContextMenu = new ContextMenuStrip();
+
+            ToolStripMenuItem refreshMenuItem = new ToolStripMenuItem("Refresh", null, new EventHandler(refreshMenuItem_Click));
+            if (Url == null)
+            {
+                refreshMenuItem.Enabled = false;
+            }
+            basicNotifyContextMenu.Items.Add(refreshMenuItem);
+
+            basicNotifyContextMenu.Items.Add(new ToolStripMenuItem("Exit", null, new EventHandler(exitMenuItem_Click)));
+
+            return basicNotifyContextMenu;
         }
 
         public MainWindow(string url)
@@ -43,6 +93,8 @@ namespace HudMon
         private void Initialize()
         {
             InitializeComponent();
+
+            UpdateNotifyContextMenu();
 
             hudsonJobsSource.DataSource = jobs;
             hudsonBuildsSource.DataSource = builds;
@@ -60,6 +112,11 @@ namespace HudMon
 
         private void RetrieveJobs()
         {
+            jobs.ResetBindings();
+            builds.ResetBindings();
+            hudsonJobsSource.ResetAllowNew();
+            hudsonJobsSource.ResetAllowNew();
+
             List<Hudson.SimpleJob> tempJobs = hudsonFactory.RetrieveJobs();
             foreach (Hudson.SimpleJob simpleJob in tempJobs)
             {
@@ -233,6 +290,11 @@ namespace HudMon
         {
             Show();
             WindowState = FormWindowState.Normal;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
     }
