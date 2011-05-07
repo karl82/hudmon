@@ -12,6 +12,8 @@ namespace HudMon
 {
     public partial class MainWindow : Form
     {
+        private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(MainWindow));
+
         HudsonFactory hudsonFactory;
 
         private BindingList<Hudson.Job> jobs = new BindingList<HudMon.Hudson.Job>();
@@ -27,6 +29,12 @@ namespace HudMon
             set
             {
                 url_ = value;
+
+                if (url_ != null)
+                {
+                    url_ = url_.Trim();
+                }
+
                 Text = url_;
 
                 RefreshJobs();
@@ -35,6 +43,7 @@ namespace HudMon
 
         private void RefreshJobs()
         {
+            ClearJobsAndBuilds();
             CreateHudsonFactory();
             RetrieveJobs();
             UpdateNotifyContextMenu();
@@ -72,7 +81,7 @@ namespace HudMon
             ContextMenuStrip basicNotifyContextMenu = new ContextMenuStrip();
 
             ToolStripMenuItem refreshMenuItem = new ToolStripMenuItem("Refresh", null, new EventHandler(refreshMenuItem_Click));
-            if (Url == null)
+            if (IsUrlEmpty())
             {
                 refreshMenuItem.Enabled = false;
             }
@@ -81,6 +90,11 @@ namespace HudMon
             basicNotifyContextMenu.Items.Add(new ToolStripMenuItem("Exit", null, new EventHandler(exitMenuItem_Click)));
 
             return basicNotifyContextMenu;
+        }
+
+        private bool IsUrlEmpty()
+        {
+            return Url == null || Url.Count() == 0;
         }
 
         public MainWindow(string url)
@@ -110,13 +124,14 @@ namespace HudMon
             hudsonFactory = new JsonHudsonFactory(Url);
         }
 
+        private void ClearJobsAndBuilds()
+        {
+            builds.Clear();
+            jobs.Clear();
+        }
+
         private void RetrieveJobs()
         {
-            jobs.ResetBindings();
-            builds.ResetBindings();
-            hudsonJobsSource.ResetAllowNew();
-            hudsonJobsSource.ResetAllowNew();
-
             List<Hudson.SimpleJob> tempJobs = hudsonFactory.RetrieveJobs();
             foreach (Hudson.SimpleJob simpleJob in tempJobs)
             {
@@ -136,7 +151,17 @@ namespace HudMon
                 case ListChangedType.ItemChanged:
                     UpdateJobListViewItem(e.NewIndex);
                     break;
+                case ListChangedType.Reset:
+                    logger.Debug("Reseting jobs");
+
+                    ClearJobsListView();
+                    break;
             }
+        }
+
+        private void ClearJobsListView()
+        {
+            jobsListView.Items.Clear();
         }
 
         private void UpdateJobListViewItem(int index)
@@ -149,10 +174,10 @@ namespace HudMon
         {
             Hudson.Job job = jobs[index];
             item.SubItems[0].Text = job.DisplayName;
-            item.ToolTipText = CreateToolTipForJob(job);
+            item.ToolTipText = CreateToolTipTextForJob(job);
         }
 
-        private string CreateToolTipForJob(HudMon.Hudson.Job job)
+        private string CreateToolTipTextForJob(HudMon.Hudson.Job job)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -295,6 +320,11 @@ namespace HudMon
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RefreshJobs();
         }
 
     }
