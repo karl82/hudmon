@@ -8,6 +8,8 @@ namespace HudMon
 {
     class JsonHudsonFactory : HudsonFactory
     {
+        log4net.ILog logger = log4net.LogManager.GetLogger(typeof(JsonHudsonFactory));
+
         const string JSON_API_STRING = "/api/json";
 
         public JsonHudsonFactory(string url)
@@ -25,6 +27,17 @@ namespace HudMon
             Hudson.Job job = jsonSerializer.Deserialize<Hudson.Job>(new JsonTextReader(new StringReader(jsonMessage)));
 
             return job;
+        }
+
+        public override void BuildJob(Hudson.Job job)
+        {
+            logger.Debug("Trying to build job: " + job);
+
+            WebClient client = new WebClient();
+
+            string response = client.DownloadString(job.Url + "/build");
+
+            logger.Debug("response" + response);
         }
 
         public override List<Hudson.SimpleJob> RetrieveJobs()
@@ -53,6 +66,6 @@ namespace HudMon
             return hudson;
         }
 
-        override protected string ApiPath { get { return JSON_API_STRING;} }
+        override protected string ApiPath { get { return JSON_API_STRING; } }
     }
 }

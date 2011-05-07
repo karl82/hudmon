@@ -60,7 +60,14 @@ namespace HudMon
 
                 foreach (Hudson.Job job in jobs)
                 {
-                    tempNotifyContextMenu.Items.Insert(0, new ToolStripMenuItem(job.Name));
+                    ToolStripMenuItem jobStripMenuItem = new ToolStripMenuItem(job.Name);
+
+                    jobStripMenuItem.Click += delegate
+                    {
+                        hudsonFactory.BuildJob(job);
+                    };
+
+                    tempNotifyContextMenu.Items.Insert(0, jobStripMenuItem);
                 }
             }
 

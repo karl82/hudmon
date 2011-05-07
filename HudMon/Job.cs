@@ -45,6 +45,11 @@ namespace HudMon
             public Build LastUnstableBuild { get; set; }
             public uint NextBuildNumber { get; set; }
             public List<Module> Modules { get; set; }
+
+            public override string ToString()
+            {
+                return Url.ToString();
+            }
         }
 
         class SimpleJob

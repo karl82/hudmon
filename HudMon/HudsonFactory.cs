@@ -11,6 +11,7 @@ namespace HudMon
         public abstract Hudson.Job RetrieveJob(string jobName);
         public abstract List<Hudson.SimpleJob> RetrieveJobs();
         public abstract Hudson.Hudson RetrieveHudson();
+        public abstract void BuildJob(Hudson.Job job);
 
         public string CreateJobUrl(string jobName)
         {
