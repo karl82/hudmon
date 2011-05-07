@@ -46,6 +46,7 @@ namespace HudMon
             ClearJobsAndBuilds();
             CreateHudsonFactory();
             RetrieveJobs();
+
             UpdateNotifyContextMenu();
         }
 
@@ -71,6 +72,7 @@ namespace HudMon
         {
             Application.Exit();
         }
+
         private void refreshMenuItem_Click(object sender, System.EventArgs e)
         {
             RefreshJobs();
@@ -133,11 +135,25 @@ namespace HudMon
         private void RetrieveJobs()
         {
             List<Hudson.SimpleJob> tempJobs = hudsonFactory.RetrieveJobs();
-            foreach (Hudson.SimpleJob simpleJob in tempJobs)
-            {
-                Hudson.Job job = hudsonFactory.RetrieveJob(simpleJob.Name);
 
-                jobs.Add(job);
+            toolStripProgressBar.Maximum = tempJobs.Count();
+            toolStripProgressBar.Visible = true;
+
+            try
+            {
+                foreach (Hudson.SimpleJob simpleJob in tempJobs)
+                {
+                    Hudson.Job job = hudsonFactory.RetrieveJob(simpleJob.Name);
+
+                    jobs.Add(job);
+
+                    toolStripProgressBar.PerformStep();
+                }
+            }
+            finally
+            {
+                toolStripProgressBar.Visible = false;
+                toolStripProgressBar.Maximum = 0;
             }
         }
 
