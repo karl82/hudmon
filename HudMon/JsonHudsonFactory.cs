@@ -9,8 +9,10 @@ namespace HudMon
     class JsonHudsonFactory : HudsonFactory
     {
         log4net.ILog logger = log4net.LogManager.GetLogger(typeof(JsonHudsonFactory));
+        private WebClient client = new WebClient();
 
         const string JSON_API_STRING = "/api/json";
+        const string BUILD_PATH = "/build";
 
         public JsonHudsonFactory(string url)
         {
@@ -19,7 +21,6 @@ namespace HudMon
 
         public override Hudson.Job RetrieveJob(string jobName)
         {
-            WebClient client = new WebClient();
             string jsonMessage = client.DownloadString(CreateJobUrl(jobName));
 
             JsonSerializer jsonSerializer = new JsonSerializer();
@@ -33,9 +34,7 @@ namespace HudMon
         {
             logger.Debug("Trying to build job: " + job);
 
-            WebClient client = new WebClient();
-
-            string response = client.DownloadString(job.Url + "/build");
+            string response = client.DownloadString(job.Url + BUILD_PATH);
 
             logger.Debug("response" + response);
         }
