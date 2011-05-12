@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -145,24 +144,11 @@ namespace HudMon
         {
             List<Hudson.SimpleJob> tempJobs = hudson.RetrieveJobs();
 
-            toolStripProgressBar.Maximum = tempJobs.Count();
-            toolStripProgressBar.Visible = true;
-
-            try
+            foreach (Hudson.SimpleJob simpleJob in tempJobs)
             {
-                foreach (Hudson.SimpleJob simpleJob in tempJobs)
-                {
-                    Hudson.Job job = hudson.RetrieveJob(simpleJob.Name);
+                Hudson.Job job = hudson.RetrieveJob(simpleJob.Name);
 
-                    jobs.Add(job);
-
-                    toolStripProgressBar.PerformStep();
-                }
-            }
-            finally
-            {
-                toolStripProgressBar.Visible = false;
-                toolStripProgressBar.Maximum = 0;
+                jobs.Add(job);
             }
         }
 
