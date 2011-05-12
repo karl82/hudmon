@@ -52,12 +52,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>lib\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json.Net35">
+      <HintPath>..\packages\Newtonsoft.Json.4.0.2\lib\net35\Newtonsoft.Json.Net35.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -77,6 +85,14 @@
   <ItemGroup>
     <Compile Include="Build.cs" />
     <Compile Include="FormUtils.cs" />
+    <Compile Include="HudsonConnection.cs" />
+    <Compile Include="HudsonConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HudsonConnectionForm.Designer.cs">
+      <DependentUpon>HudsonConnectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IHudson.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,8 +102,8 @@
     <Compile Include="HealtReport.cs" />
     <Compile Include="Hudson.cs" />
     <Compile Include="Job.cs" />
-    <Compile Include="HudsonFactory.cs" />
-    <Compile Include="JsonHudsonFactory.cs" />
+    <Compile Include="HudsonBase.cs" />
+    <Compile Include="JsonHudson.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -135,6 +151,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="HudsonConnectionForm.resx">
+      <DependentUpon>HudsonConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -147,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\HudMon.Hudson.Hudson.datasource" />
     <None Include="Properties\DataSources\HudMon.Hudson.Job.datasource" />
     <None Include="Properties\DataSources\HudMon.Hudson.SimpleJob.datasource" />

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace HudMon
 {
     namespace Hudson
     {
-        class Hudson
+        public class Hudson
         {
             public string NodeDescription { get; set; }
             public string NodeName { get; set; }

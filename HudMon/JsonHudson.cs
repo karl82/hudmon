@@ -1,22 +1,28 @@
 ﻿
-using Newtonsoft.Json;
-using System.Net;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace HudMon
 {
-    class JsonHudsonFactory : HudsonFactory
+    class JsonHudson : BaseHudson
     {
-        log4net.ILog logger = log4net.LogManager.GetLogger(typeof(JsonHudsonFactory));
+        log4net.ILog logger = log4net.LogManager.GetLogger(typeof(JsonHudson));
         private WebClient client = new WebClient();
 
         const string JSON_API_STRING = "/api/json";
         const string BUILD_PATH = "/build";
 
-        public JsonHudsonFactory(string url)
+
+        public JsonHudson()
         {
-            Url = url;
+            this.Connection = new HudsonConnection();
+        }
+
+        public JsonHudson(HudsonConnection connection)
+        {
+            this.Connection = connection;
         }
 
         public override Hudson.Job RetrieveJob(string jobName)
@@ -26,6 +32,8 @@ namespace HudMon
             JsonSerializer jsonSerializer = new JsonSerializer();
 
             Hudson.Job job = jsonSerializer.Deserialize<Hudson.Job>(new JsonTextReader(new StringReader(jsonMessage)));
+
+            logger.Debug("Retrieved job:" + job);
 
             return job;
         }
@@ -55,7 +63,6 @@ namespace HudMon
 
         public override Hudson.Hudson RetrieveHudson()
         {
-            WebClient client = new WebClient();
             string jsonMessage = client.DownloadString(CreateBaseUrl());
 
             JsonSerializer jsonSerializer = new JsonSerializer();

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,28 +12,31 @@ namespace HudMon
     {
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(MainWindow));
 
-        HudsonFactory hudsonFactory;
+        IHudson hudson;
 
         private BindingList<Hudson.Job> jobs = new BindingList<HudMon.Hudson.Job>();
         private BindingList<Hudson.Build> builds = new BindingList<HudMon.Hudson.Build>();
-        private string url_;
 
         public string Url
         {
             get
             {
-                return url_;
+                return hudson.Connection.Url;
             }
+        }
+
+        public HudsonConnection Connection
+        {
+            get
+            {
+                return hudson.Connection;
+            }
+
             set
             {
-                url_ = value;
+                hudson.Connection = value;
 
-                if (url_ != null)
-                {
-                    url_ = url_.Trim();
-                }
-
-                Text = url_;
+                Text = Url;
 
                 RefreshJobs();
             }
@@ -44,7 +45,6 @@ namespace HudMon
         private void RefreshJobs()
         {
             ClearJobsAndBuilds();
-            CreateHudsonFactory();
             RetrieveJobs();
 
             UpdateNotifyContextMenu();
@@ -64,7 +64,7 @@ namespace HudMon
 
                     jobStripMenuItem.Click += delegate
                     {
-                        hudsonFactory.BuildJob(job);
+                        hudson.BuildJob(job);
                     };
 
                     tempNotifyContextMenu.Items.Insert(0, jobStripMenuItem);
@@ -103,19 +103,21 @@ namespace HudMon
 
         private bool IsUrlEmpty()
         {
-            return Url == null || Url.Count() == 0;
+            return String.IsNullOrEmpty(Url);
         }
 
         public MainWindow(string url)
         {
             Initialize();
 
-            Url = url;
+            // TODO: implement from CLI
+            //           Url = url;
         }
 
         private void Initialize()
         {
             InitializeComponent();
+            CreateHudson();
 
             UpdateNotifyContextMenu();
 
@@ -128,9 +130,9 @@ namespace HudMon
             Initialize();
         }
 
-        private void CreateHudsonFactory()
+        private void CreateHudson()
         {
-            hudsonFactory = new JsonHudsonFactory(Url);
+            hudson = new JsonHudson();
         }
 
         private void ClearJobsAndBuilds()
@@ -141,7 +143,7 @@ namespace HudMon
 
         private void RetrieveJobs()
         {
-            List<Hudson.SimpleJob> tempJobs = hudsonFactory.RetrieveJobs();
+            List<Hudson.SimpleJob> tempJobs = hudson.RetrieveJobs();
 
             toolStripProgressBar.Maximum = tempJobs.Count();
             toolStripProgressBar.Visible = true;
@@ -150,7 +152,7 @@ namespace HudMon
             {
                 foreach (Hudson.SimpleJob simpleJob in tempJobs)
                 {
-                    Hudson.Job job = hudsonFactory.RetrieveJob(simpleJob.Name);
+                    Hudson.Job job = hudson.RetrieveJob(simpleJob.Name);
 
                     jobs.Add(job);
 
@@ -313,16 +315,16 @@ namespace HudMon
 
         private void enterURLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AskForUrl();
+            AskForConnection();
         }
 
-        private void AskForUrl()
+        private void AskForConnection()
         {
-            string url = Url;
+            HudsonConnectionForm hcf = new HudsonConnectionForm(hudson.Connection);
 
-            if (FormUtils.InputBox("Hudson URL", "Enter Hudson Server URL", ref url) == DialogResult.OK)
+            if (hcf.ShowDialog() == DialogResult.OK)
             {
-                Url = url;
+                Connection = hcf.Connection;
             }
         }
 

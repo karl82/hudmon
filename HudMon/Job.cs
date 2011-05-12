@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 
 namespace HudMon
 {
     namespace Hudson
     {
-        class Job
+        public class Job
         {
             //[JsonProperty]
             public string Description { get; set; }
@@ -52,7 +48,7 @@ namespace HudMon
             }
         }
 
-        class SimpleJob
+        public class SimpleJob
         {
             public string Name { get; set; }
             public string Url { get; set; }
