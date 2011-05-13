@@ -13,7 +13,21 @@ namespace HudMon
 
         const string JSON_API_STRING = "/api/json";
         const string BUILD_PATH = "/build";
+        private HudsonConnection _Connection;
 
+        public override HudsonConnection Connection
+        {
+            get
+            {
+                return _Connection;
+            }
+            set
+            {
+                _Connection = value;
+
+                client.Credentials = new NetworkCredential(Connection.Username, Connection.Password);
+            }
+        }
 
         public JsonHudson()
         {

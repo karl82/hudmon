@@ -33,7 +33,7 @@ namespace HudMon
 
         public abstract void BuildJob(Hudson.Job job);
 
-        public HudsonConnection Connection { get; set; }
+        public virtual HudsonConnection Connection { get; set; }
 
         #endregion
     }

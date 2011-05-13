@@ -93,6 +93,9 @@
       <DependentUpon>HudsonConnectionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IHudson.cs" />
+    <Compile Include="JobStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

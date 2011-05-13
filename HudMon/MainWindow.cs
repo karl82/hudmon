@@ -20,7 +20,7 @@ namespace HudMon
         {
             get
             {
-                return hudson.Connection.Url;
+                return Connection.Url;
             }
         }
 
@@ -59,11 +59,15 @@ namespace HudMon
 
                 foreach (Hudson.Job job in jobs)
                 {
-                    ToolStripMenuItem jobStripMenuItem = new ToolStripMenuItem(job.Name);
+                    ToolStripMenuItem jobStripMenuItem = new JobStripMenuItem(job);
 
-                    jobStripMenuItem.Click += delegate
+                    jobStripMenuItem.Click += delegate(object sender, System.EventArgs e)
                     {
-                        hudson.BuildJob(job);
+                        logger.Debug("Clicked: " + sender);
+                        if (sender is JobStripMenuItem)
+                        {
+                            hudson.BuildJob(((JobStripMenuItem)sender).Job);
+                        }
                     };
 
                     tempNotifyContextMenu.Items.Insert(0, jobStripMenuItem);
