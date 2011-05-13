@@ -8,6 +8,11 @@ namespace HudMon
             : base(job.DisplayName)
         {
             this.Job = job;
+
+            if (Job.Buildable == false)
+            {
+                Enabled = false;
+            }
         }
 
         public Hudson.Job Job { get; set; }
