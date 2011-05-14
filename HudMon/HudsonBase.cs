@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace HudMon
 {
     abstract partial class BaseHudson : IHudson
@@ -11,14 +12,14 @@ namespace HudMon
             }
         }
 
-        protected string CreateJobUrl(string jobName)
+        protected Uri CreateJobUri(string jobName)
         {
-            return Url + "/job/" + jobName + ApiPath;
+            return new Uri(Url + "/job/" + jobName + ApiPath);
         }
 
-        protected string CreateBaseUrl()
+        protected Uri CreateBaseUri()
         {
-            return Url + ApiPath;
+            return new Uri(Url + ApiPath);
         }
 
         protected abstract string ApiPath { get; }

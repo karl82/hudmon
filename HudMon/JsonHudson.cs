@@ -1,7 +1,7 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using Newtonsoft.Json;
 
 namespace HudMon
@@ -9,7 +9,7 @@ namespace HudMon
     class JsonHudson : BaseHudson
     {
         log4net.ILog logger = log4net.LogManager.GetLogger(typeof(JsonHudson));
-        private WebClient client = new WebClient();
+        private HudsonWebClient client;
 
         const string JSON_API_STRING = "/api/json";
         const string BUILD_PATH = "/build";
@@ -24,8 +24,7 @@ namespace HudMon
             set
             {
                 _Connection = value;
-
-                client.Credentials = new NetworkCredential(Connection.Username, Connection.Password);
+                client = new HudsonWebClient(Connection);
             }
         }
 
@@ -41,7 +40,7 @@ namespace HudMon
 
         public override Hudson.Job RetrieveJob(string jobName)
         {
-            string jsonMessage = client.DownloadString(CreateJobUrl(jobName));
+            string jsonMessage = client.DownloadString(CreateJobUri(jobName));
 
             JsonSerializer jsonSerializer = new JsonSerializer();
 
@@ -54,9 +53,11 @@ namespace HudMon
 
         public override void BuildJob(Hudson.Job job)
         {
-            logger.Debug("Trying to build job: " + job);
+            Uri tempUrl = new Uri(job.Url + BUILD_PATH);
 
-            string response = client.DownloadString(job.Url + BUILD_PATH);
+            logger.DebugFormat("Trying to build job: {0} with url {1} ", job, tempUrl);
+
+            string response = client.DownloadString(tempUrl);
 
             logger.Debug("response" + response);
         }
@@ -77,7 +78,7 @@ namespace HudMon
 
         public override Hudson.Hudson RetrieveHudson()
         {
-            string jsonMessage = client.DownloadString(CreateBaseUrl());
+            string jsonMessage = client.DownloadString(CreateBaseUri());
 
             JsonSerializer jsonSerializer = new JsonSerializer();
 
