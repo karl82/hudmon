@@ -13,6 +13,26 @@ namespace HudMon
             {
                 Enabled = false;
             }
+
+            SetBackColorByLastBuild();
+        }
+
+        private void SetBackColorByLastBuild()
+        {
+            if (Job.LastBuild.Equals(Job.LastFailedBuild))
+            {
+                BackColor = System.Drawing.Color.Red;
+            }
+
+            if (Job.LastBuild.Equals(Job.LastUnstableBuild))
+            {
+                BackColor = System.Drawing.Color.Yellow;
+            }
+
+            if (Job.LastBuild.Equals(Job.LastSuccessfulBuild))
+            {
+                BackColor = System.Drawing.Color.Green;
+            }
         }
 
         public Hudson.Job Job { get; set; }

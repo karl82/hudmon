@@ -85,7 +85,7 @@
   <ItemGroup>
     <Compile Include="Build.cs" />
     <Compile Include="FormUtils.cs" />
-    <Compile Include="HudsonClientFactory.cs" />
+    <Compile Include="HudsonWebClient.cs" />
     <Compile Include="HudsonConnection.cs" />
     <Compile Include="HudsonConnectionForm.cs">
       <SubType>Form</SubType>
