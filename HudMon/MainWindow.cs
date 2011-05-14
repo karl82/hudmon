@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 
@@ -43,10 +44,24 @@ namespace HudMon
 
         private void RefreshJobs()
         {
-            ClearJobsAndBuilds();
-            RetrieveJobs();
+            try
+            {
+                ClearJobsAndBuilds();
+                RetrieveJobs();
 
-            UpdateNotifyContextMenu();
+            }
+            catch (WebException e)
+            {
+                logger.Error("Web problem during refreshing jobs", e);
+
+                MessageBox.Show(this, e.Message + "\nRefresh or enter different URL", "Web Error",
+                                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ClearJobsAndBuilds();
+            }
+            finally
+            {
+                UpdateNotifyContextMenu();
+            }
         }
 
         private void UpdateNotifyContextMenu()
