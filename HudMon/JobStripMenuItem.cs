@@ -5,7 +5,7 @@ namespace HudMon
     class JobStripMenuItem : ToolStripMenuItem
     {
         public JobStripMenuItem(Hudson.Job job)
-            : base(job.DisplayName)
+            : base(string.Format("{0} #{1}", job.DisplayName, job.LastBuild))
         {
             this.Job = job;
 
