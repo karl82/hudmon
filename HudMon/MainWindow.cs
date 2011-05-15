@@ -92,7 +92,18 @@ namespace HudMon
                         logger.Debug("Clicked: " + sender);
                         if (sender is JobStripMenuItem)
                         {
-                            hudson.BuildJob(((JobStripMenuItem)sender).Job);
+                            try
+                            {
+                                hudson.BuildJob(((JobStripMenuItem)sender).Job);
+                            }
+                            catch (WebException ex)
+                            {
+                                logger.Error("Cannot build job: " + job, ex);
+
+                                MessageBox.Show("Cannot build job: " + job.DisplayName
+                                    + "\n" + ex.Message + "\nWrong username/password or missing permissions?",
+                                    "Job Build Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     };
 
