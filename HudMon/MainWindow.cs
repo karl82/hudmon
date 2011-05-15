@@ -60,8 +60,19 @@ namespace HudMon
             }
             finally
             {
+                UpdateMenu();
                 UpdateNotifyContextMenu();
             }
+        }
+
+        private void UpdateMenu()
+        {
+            refreshToolStripMenuItem.Enabled = IsNotUrlEmpty();
+        }
+
+        private bool IsNotUrlEmpty()
+        {
+            return !IsUrlEmpty();
         }
 
         private void UpdateNotifyContextMenu()
