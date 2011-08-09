@@ -14,9 +14,13 @@ namespace HudMon
 
         IHudson hudson;
 
+
         private BindingList<Hudson.Job> jobs = new BindingList<HudMon.Hudson.Job>();
         private BindingList<Hudson.Build> builds = new BindingList<HudMon.Hudson.Build>();
 
+        /// <summary>
+        /// Url of current Hudson server
+        /// </summary>
         public string Url
         {
             get
@@ -25,13 +29,16 @@ namespace HudMon
             }
         }
 
+        /// <summary>
+        /// Connection with credentials to Hudson server
+        /// </summary>
+        /// When value is set then title of form is changed according to server's URL and jobs are refreshed
         public HudsonConnection Connection
         {
             get
             {
                 return hudson.Connection;
             }
-
             set
             {
                 hudson.Connection = value;
@@ -42,6 +49,9 @@ namespace HudMon
             }
         }
 
+        /// <summary>
+        /// Refresh jobs from Hudson server
+        /// </summary>
         private void RefreshJobs()
         {
             try
@@ -80,6 +90,13 @@ namespace HudMon
             refreshToolStripMenuItem.Enabled = IsNotUrlEmpty();
         }
 
+        /// <summary>
+        /// Checks Hudson server's URL if is not empty
+        /// </summary>
+        /// <returns>
+        /// <code>true</code> if Hudson server's URL is not empty
+        /// <code>false</code> if Hudson server's URL is empty
+        /// </returns>
         private bool IsNotUrlEmpty()
         {
             return !IsUrlEmpty();
@@ -151,6 +168,13 @@ namespace HudMon
             return basicNotifyContextMenu;
         }
 
+        /// <summary>
+        /// Checks Hudson server's URL if is empty
+        /// </summary>
+        /// <returns>
+        /// <code>true</code> if Hudson server's URL is empty
+        /// <code>false</code> if Hudson server's URL is not empty
+        /// </returns>
         private bool IsUrlEmpty()
         {
             return String.IsNullOrEmpty(Url);
@@ -180,17 +204,25 @@ namespace HudMon
             Initialize();
         }
 
+        /// <summary>
+        /// Create Hudson instance
+        /// </summary>
         private void CreateHudson()
         {
             hudson = new JsonHudson();
         }
 
+        /// <summary>
+        /// Clears jobs and builds retrieved by RetrieveJobs
+        /// </summary>
         private void ClearJobsAndBuilds()
         {
             builds.Clear();
             jobs.Clear();
         }
 
+        /// <summary>
+        /// </summary>
         private void RetrieveJobs()
         {
             List<Hudson.SimpleJob> tempJobs = hudson.RetrieveJobs();
@@ -239,6 +271,12 @@ namespace HudMon
             item.ToolTipText = CreateToolTipTextForJob(job);
         }
 
+        /// <summary>
+        /// Returns string representing tooltip text for Job
+        /// </summary>
+        /// Very similiar to ToString method
+        /// <param name="job">job for which tool tip text should be generated</param>
+        /// <returns></returns>
         private string CreateToolTipTextForJob(HudMon.Hudson.Job job)
         {
             StringBuilder sb = new StringBuilder();
@@ -330,9 +368,12 @@ namespace HudMon
                 Hudson.Build selectedBuild = builds[indexes[0]];
                 Execute(selectedBuild.Url);
             }
-
         }
 
+        /// <summary>
+        /// Executes external program
+        /// </summary>
+        /// <param name="what"></param>
         private void Execute(string what)
         {
             Process.Start(what);
@@ -355,6 +396,9 @@ namespace HudMon
             AskForConnection();
         }
 
+        /// <summary>
+        /// Ask user for Hudson connection information
+        /// </summary>
         private void AskForConnection()
         {
             HudsonConnectionForm hcf = new HudsonConnectionForm(hudson.Connection);

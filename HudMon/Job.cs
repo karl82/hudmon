@@ -4,28 +4,23 @@ namespace HudMon
 {
     namespace Hudson
     {
+        /// <summary>
+        /// Class representing Hudson's job
+        /// </summary>
         public class Job
         {
-            //[JsonProperty]
             public string Description { get; set; }
 
-            //[JsonProperty]
             public string DisplayName { get; set; }
 
-            //[JsonProperty]
             public string Name { get; set; }
 
-            //[JsonProperty]
             public string Url { get; set; }
 
-            //[JsonProperty]
             public bool Buildable { get; set; }
 
-            //[JsonProperty]
-            //[JsonArray]
             public List<Build> Builds { get; set; }
 
-            //[JsonProperty]
             public string Color { get; set; }
 
             public Build FirstBuild { get; set; }
@@ -48,6 +43,9 @@ namespace HudMon
             }
         }
 
+        /// <summary>
+        /// Represents simple job with it's name and url
+        /// </summary>
         public class SimpleJob
         {
             public string Name { get; set; }

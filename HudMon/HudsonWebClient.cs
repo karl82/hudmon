@@ -3,6 +3,9 @@ using System;
 using System.Net;
 namespace HudMon
 {
+    /// <summary>
+    /// Class which wraps WebClient for easier use with HudsonConnection
+    /// </summary>
     class HudsonWebClient
     {
         private WebClient wc = new WebClient();
