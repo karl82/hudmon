@@ -38,7 +38,7 @@ namespace HudMon
 
                 Text = Url;
 
-                RefreshJobs();
+                DoRefresh();
             }
         }
 
@@ -58,14 +58,24 @@ namespace HudMon
                                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ClearJobsAndBuilds();
             }
-            finally
-            {
-                UpdateMenu();
-                UpdateNotifyContextMenu();
-            }
         }
 
-        private void UpdateMenu()
+        /// <summary>
+        /// Refresh all necessary items
+        /// </summary>
+        private void DoRefresh()
+        {
+            RefreshJobs();
+            UpdateMenus();
+        }
+
+        private void UpdateMenus()
+        {
+            UpdateMainMenu();
+            UpdateNotifyContextMenu();
+        }
+
+        private void UpdateMainMenu()
         {
             refreshToolStripMenuItem.Enabled = IsNotUrlEmpty();
         }
@@ -122,7 +132,7 @@ namespace HudMon
 
         private void refreshMenuItem_Click(object sender, System.EventArgs e)
         {
-            RefreshJobs();
+            DoRefresh();
         }
 
         private ContextMenuStrip CreateBasicNotifyContextMenu()
@@ -376,7 +386,7 @@ namespace HudMon
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RefreshJobs();
+            DoRefresh();
         }
 
     }
